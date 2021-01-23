@@ -1,50 +1,50 @@
 
-let yellow = DigitalPin.P1;
-let blue = DigitalPin.P2;
-let green = DigitalPin.P8;
-let red = AnalogPin.P5;
-let toggle = true;
-let ledIndex = 0;
-let leds: DigitalPin[] = [yellow, blue, green]
+class LEDs {
 
+    yellow: DigitalPin;
+    blue: DigitalPin;
+    green: DigitalPin;
+    red: AnalogPin;
+    ledIndex: number;
+    leds: DigitalPin[];     
 
-function simpleLEDtest() {
-    basic.pause(1000)
-    pins.digitalWritePin(yellow, 1);
-    pins.digitalWritePin(blue, 1);
-    pins.digitalWritePin(green, 1);
-    basic.pause(1000)
-    pins.digitalWritePin(yellow, 0);
-    pins.digitalWritePin(blue, 0);
-    pins.digitalWritePin(green, 0);
-}
-
-
-function aClicked() {
-    lightNextLed()
-}
-
-function toggleBlue() {
-    toggle=!toggle
-    pins.digitalWritePin(blue, toggle?1:0)
-}
-
-function lightNextLed() {
-
-    ledIndex++;
-    if(ledIndex >= leds.length) {
-        ledIndex = 0
+    constructor() {
+        this.yellow = DigitalPin.P1;
+        this.blue = DigitalPin.P2;
+        this.green = DigitalPin.P8;
+        this.red = AnalogPin.P5;
+        this.ledIndex = 0;
+        this.leds = [this.yellow, this.blue, this.green];  
     }
-    leds.forEach(function (value: DigitalPin, index: number) {
-        pins.digitalWritePin(value, 0);
-    })
-    pins.digitalWritePin(leds[ledIndex], 1)
-}
 
-function simplyRed() {
-    let level = pins.analogReadPin(red);
-    if(level > 800) {
-        pins.digitalWritePin(blue, 1)
+    public next() {
+        this.allOff();
+        this.ledIndex++;
+        if(this.ledIndex >= this.leds.length) {
+            this.ledIndex = 0
+        }
+        pins.digitalWritePin(this.leds[this.ledIndex], 1)
+    }
+
+    public allOff() {
+        this.leds.forEach(function (value: DigitalPin, index: number) {
+            pins.digitalWritePin(value, 0);
+        })
+    }
+
+    public allOn() {
+        this.leds.forEach(function (value: DigitalPin, index: number) {
+            pins.digitalWritePin(value, 1);
+        })
+    }
+
+    public blinkBlue(blinks: number, delay: number) {
+        for(let i = 0; i < blinks; i++) {
+            pins.digitalWritePin(this.blue, 1)
+            basic.pause(delay);
+            pins.digitalWritePin(this.blue, 0)
+            basic.pause(delay);
+        }
     }
 }
 
@@ -52,8 +52,16 @@ function simplyRed() {
 /*
  *. Set up
  */
+let leds = new LEDs();
+function aClicked() {
+    leds.allOff();
+}
 input.onButtonPressed(Button.A, aClicked);
-function nada(){}
+function nada(){
+    leds.next();
+    basic.pause(100);
+}
+leds.blinkBlue(10, 250)
 basic.forever(nada);
 
 
