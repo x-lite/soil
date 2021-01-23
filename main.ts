@@ -17,12 +17,29 @@ class LEDs {
         this.leds = [this.yellow, this.blue, this.green];  
     }
 
-    public next() {
+
+    public slide() {
+        for(let i = 1; i < this.leds.length; i++) {
+            this.allOff();
+            pins.digitalWritePin(this.leds[i], 1)
+            basic.pause(100);
+        }
+        for(let i = this.leds.length -1; i >= 0 ; i--) {
+            this.allOff();
+            pins.digitalWritePin(this.leds[i], 1)
+            basic.pause(100);
+        }
+    }
+
+    public next(step: number) {
         this.allOff();
-        this.ledIndex++;
+        this.ledIndex += step;
         if(this.ledIndex >= this.leds.length) {
             this.ledIndex = 0
+        } else if(this.ledIndex <= 0) {
+            this.ledIndex = this.leds.length - 1
         }
+
         pins.digitalWritePin(this.leds[this.ledIndex], 1)
     }
 
@@ -58,10 +75,9 @@ function aClicked() {
 }
 input.onButtonPressed(Button.A, aClicked);
 function nada(){
-    leds.next();
-    basic.pause(100);
+  leds.slide();
 }
-leds.blinkBlue(10, 250)
+leds.blinkBlue(5, 150)
 basic.forever(nada);
 
 
