@@ -1,32 +1,43 @@
 
 class LEDs {
 
-    yellow: DigitalPin;
-    blue: DigitalPin;
-    green: DigitalPin;
+    yellow: AnalogPin;
+    blue: AnalogPin;
+    green: AnalogPin;
     red: AnalogPin;
     ledIndex: number;
-    leds: DigitalPin[];     
+    leds: AnalogPin[];     
 
     constructor() {
-        this.yellow = DigitalPin.P1;
-        this.blue = DigitalPin.P2;
-        this.green = DigitalPin.P8;
-        this.red = AnalogPin.P5;
+        this.yellow = AnalogPin.P1;
+        this.blue = AnalogPin.P2;
+        this.green = AnalogPin.P8;
+        this.red = AnalogPin.P16;
         this.ledIndex = 0;
-        this.leds = [this.yellow, this.blue, this.green];  
+        this.leds = [this.red,this.yellow, this.blue, this.green];  
     }
 
 
+    public allFlash() {
+        this.allOff();
+        this.allOn();
+        basic.pause(100);
+        this.allOff();
+        basic.pause(100);
+        this.allOn();
+        basic.pause(100);
+        this.allOff();
+    }
+
     public slide() {
-        for(let i = 1; i < this.leds.length; i++) {
+        for(let i = 0; i < this.leds.length; i++) {
             this.allOff();
-            pins.digitalWritePin(this.leds[i], 1)
+            pins.analogWritePin(this.leds[i], 500)
             basic.pause(100);
         }
         for(let i = this.leds.length -1; i >= 0 ; i--) {
             this.allOff();
-            pins.digitalWritePin(this.leds[i], 1)
+            pins.analogWritePin(this.leds[i], 500)
             basic.pause(100);
         }
     }
@@ -35,31 +46,31 @@ class LEDs {
         this.allOff();
         this.ledIndex += step;
         if(this.ledIndex >= this.leds.length) {
-            this.ledIndex = 0
+            this.ledIndex = 0;
         } else if(this.ledIndex <= 0) {
-            this.ledIndex = this.leds.length - 1
+            this.ledIndex = this.leds.length - 1;
         }
 
-        pins.digitalWritePin(this.leds[this.ledIndex], 1)
+        pins.analogWritePin(this.leds[this.ledIndex], 1)
     }
 
     public allOff() {
-        this.leds.forEach(function (value: DigitalPin, index: number) {
-            pins.digitalWritePin(value, 0);
+        this.leds.forEach(function (value: AnalogPin, index: number) {
+            pins.analogWritePin(value, 0);
         })
     }
 
     public allOn() {
-        this.leds.forEach(function (value: DigitalPin, index: number) {
-            pins.digitalWritePin(value, 1);
+        this.leds.forEach(function (value: AnalogPin, index: number) {
+            pins.analogWritePin(value, 500);            
         })
     }
 
     public blinkBlue(blinks: number, delay: number) {
         for(let i = 0; i < blinks; i++) {
-            pins.digitalWritePin(this.blue, 1)
+            pins.analogWritePin(this.blue, 500);
             basic.pause(delay);
-            pins.digitalWritePin(this.blue, 0)
+            pins.analogWritePin(this.blue, 0);
             basic.pause(delay);
         }
     }
@@ -75,9 +86,13 @@ function aClicked() {
 }
 input.onButtonPressed(Button.A, aClicked);
 function nada(){
+  leds.blinkBlue(5, 150)
   leds.slide();
+  leds.slide();
+  leds.blinkBlue(5, 50)
+  leds.allFlash();
 }
-leds.blinkBlue(5, 150)
+
 basic.forever(nada);
 
 
