@@ -1,6 +1,7 @@
 /*
  * TODO
  *  - Build the probe!
+ *  - Scan routine to consider chosen soil type
  *
  */
 declare enum SoilType {
