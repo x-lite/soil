@@ -11,7 +11,8 @@
         "main.ts",
         "README.md",
         "leds.ts",
-        "screen.ts"
+        "screen.ts",
+        "probe.ts"
     ],
     "testFiles": [
         "test.ts"

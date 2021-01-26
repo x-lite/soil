@@ -19,7 +19,7 @@ class Screen {
         this.results = [];
     }
 
-    public addResult(oneToFive: number) {
+    public addResult(oneToFive: SignalLevel) {
         if(oneToFive > 5) oneToFive = 5;
         if(oneToFive < 1) oneToFive = 1;
         this.results.push(oneToFive);
@@ -57,4 +57,12 @@ class Screen {
         basic.showIcon(IconNames.Sad);
     }
     
+}
+
+enum SignalLevel {
+    ONE = 1,
+    TWO = 2,
+    THREE = 3,
+    FOUR = 4,
+    FIVE = 5
 }

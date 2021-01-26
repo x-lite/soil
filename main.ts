@@ -1,11 +1,35 @@
 /*
- *. Set up
+ * TODO
+ *  - Build the probe!
+ *
  */
+declare enum SoilType {
+    Wet = 1,
+    Medium =2, 
+    Dry = 3
+}
+
 let leds = new LEDs();
 let screen = new Screen();
+let probe = new Probe();
+
+let selectedSoilType = SoilType.Wet;
+
+function nextSoilType() {
+    if(selectedSoilType == SoilType.Wet) {
+        selectedSoilType = SoilType.Medium;
+    } else if(selectedSoilType == SoilType.Medium) {
+        selectedSoilType = SoilType.Dry;
+    } else {
+        selectedSoilType = SoilType.Wet
+    }
+    leds.showSoilSetting(selectedSoilType);
+}
+
 
 function aClicked() {
     screen.reset();
+    nextSoilType();
 }
 
 function bClicked() {
@@ -20,7 +44,7 @@ function runAScan() {
         let val = getReading();
         total+=val;
         screen.addResult(val);
-        basic.pause(750);
+        leds.slide();
     }
     let avg = total/5;
     
@@ -33,14 +57,13 @@ function runAScan() {
     } else {
         screen.needsWater();
     }
+
+    leds.showSoilSetting(selectedSoilType);
 }
 
 function getReading() {
-    return randint(1,5);
+    return probe.scan();
 }
-input.onButtonPressed(Button.A, aClicked);
-input.onButtonPressed(Button.B, bClicked)
-
 
 function loadingRoutine(){
   screen.startUp();
@@ -55,13 +78,12 @@ function loadingRoutine(){
   basic.pause(100);
 }
 
+input.onButtonPressed(Button.A, aClicked);
+input.onButtonPressed(Button.B, bClicked)
 
+loadingRoutine();
 screen.reset();
-//loadingRoutine();
-
-
-
-//basic.forever(loadingRoutine());
+leds.showSoilSetting(selectedSoilType);
 
 
 

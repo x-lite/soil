@@ -41,6 +41,11 @@ class LEDs {
         }
     }
 
+    public showSoilSetting(selectedSoilType: SoilType) {
+        this.allOff();
+        pins.analogWritePin(this.leds[selectedSoilType], 500)
+    }
+
     public next(step: number) {
         this.allOff();
         this.ledIndex += step;
