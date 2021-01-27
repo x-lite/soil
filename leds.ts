@@ -17,14 +17,17 @@ class LEDs {
     }
 
 
-    public allFlash() {
-        this.allOff();
-        this.allOn();
-        basic.pause(100);
-        this.allOff();
-        basic.pause(100);
-        this.allOn();
-        basic.pause(100);
+
+
+    public allFlash(numberOfTimes: number, delay: number) {
+
+        for(let i = 0; i < numberOfTimes; i++) {
+            this.allOn();
+            basic.pause(delay);
+            this.allOff();
+            basic.pause(delay);
+        }
+
         this.allOff();
     }
 
@@ -70,11 +73,11 @@ class LEDs {
         })
     }
 
-    public blinkBlue(blinks: number, delay: number) {
+    public blinkSingle(ledPin: AnalogPin, blinks: number, delay: number) {
         for(let i = 0; i < blinks; i++) {
-            pins.analogWritePin(this.blue, 500);
+            pins.analogWritePin(ledPin, 500);
             basic.pause(delay);
-            pins.analogWritePin(this.blue, 0);
+            pins.analogWritePin(ledPin, 0);
             basic.pause(delay);
         }
     }

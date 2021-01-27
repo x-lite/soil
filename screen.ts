@@ -1,6 +1,6 @@
 class Screen {
 
-    results: number[];
+    results: MoistureLevel[];
 
     constructor() {
         this.results = [];
@@ -11,7 +11,7 @@ class Screen {
     }
 
     public ready() {
-        basic.showIcon(IconNames.Fabulous);
+        basic.showIcon(IconNames.Cow);
     }
 
     public reset() {
@@ -19,23 +19,21 @@ class Screen {
         this.results = [];
     }
 
-    public addResult(oneToFive: SignalLevel) {
-        if(oneToFive > 5) oneToFive = 5;
-        if(oneToFive < 1) oneToFive = 1;
-        this.results.push(oneToFive);
-        this.drawBar(oneToFive, this.results.length -1);
+    public addResult(moistureLevel: MoistureLevel) {
+        this.results.push(moistureLevel);
+        this.drawBar(moistureLevel, this.results.length -1);
     }
 
     public drawChart() {
         basic.clearScreen();
-        this.results.forEach(function (value: number, index: number) {
+        this.results.forEach(function (value: MoistureLevel, index: number) {
             this.drawBar(value, index)
         })
     }
 
-    public drawBar(value: number, index: number) {
-        for(let i = 0; i < value; i++) {
-            led.plot(index, 4-i);
+    public drawBar(moistureLevel: MoistureLevel, xPosition: number) {
+        for(let i = 0; i < moistureLevel; i++) {
+            led.plot(xPosition, 4-i);
         }
     }
 
@@ -47,22 +45,17 @@ class Screen {
             basic.pause(250);
         }
     }
+
     public allGood() {
         basic.showIcon(IconNames.Heart);
     }
+
     public notSure() {
         basic.showIcon(IconNames.Target);
     }
+    
     public needsWater() {
         basic.showIcon(IconNames.Sad);
     }
     
-}
-
-enum SignalLevel {
-    ONE = 1,
-    TWO = 2,
-    THREE = 3,
-    FOUR = 4,
-    FIVE = 5
 }

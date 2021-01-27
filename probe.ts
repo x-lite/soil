@@ -9,20 +9,20 @@ class Probe {
         this.outPin = AnalogPin.P3;
     }
 
-    public scan(): number{    
+    public scan(): MoistureLevel{    
         pins.analogWritePin(this.outPin, 1023);
         let scanVal = pins.analogReadPin(this.inPin);
-        serial.writeNumber(scanVal);
+        serial.writeNumber(1000);
         if(scanVal > 900) {
-            return 5;
-        } else if (scanVal > 700) {
-            return 4;
-        } else if (scanVal > 500) {
-            return 3;
-        } else if (scanVal > 300) {
-            return 2;
+            return MoistureLevel.Wet;
+        } else if (scanVal > 800) {
+            return MoistureLevel.Damp;
+        } else if (scanVal > 600) {
+            return MoistureLevel.Medium;
+        } else if (scanVal > 400) {
+            return MoistureLevel.Dry;
         } else {
-            return 1;
+            return MoistureLevel.Arrid;
         }
     }
 }
