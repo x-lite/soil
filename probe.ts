@@ -3,16 +3,18 @@ class Probe {
 
     inPin: AnalogPin;
     outPin: AnalogPin;
+    logger: Logger;
 
-    constructor() {
+    constructor(logger: Logger) {
         this.inPin = AnalogPin.P0;
         this.outPin = AnalogPin.P3;
+        this.logger = logger;
     }
 
     public scan(): MoistureLevel{    
         pins.analogWritePin(this.outPin, 1023);
         let scanVal = pins.analogReadPin(this.inPin);
-        serial.writeNumber(1000);
+        logger.data(scanVal);
         if(scanVal > 900) {
             return MoistureLevel.Wet;
         } else if (scanVal > 800) {

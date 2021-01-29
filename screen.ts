@@ -1,8 +1,10 @@
 class Screen {
 
     results: MoistureLevel[];
-
-    constructor() {
+    logger: Logger;
+    
+    constructor(logger: Logger) {
+        this.logger = logger;
         this.results = [];
     }
     

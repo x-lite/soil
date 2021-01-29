@@ -6,8 +6,11 @@ class LEDs {
     red: AnalogPin;
     ledIndex: number;
     leds: AnalogPin[];     
+    logger: Logger;
 
-    constructor() {
+    
+    constructor(logger: Logger) {
+        this.logger = logger;
         this.yellow = AnalogPin.P1;
         this.blue = AnalogPin.P2;
         this.green = AnalogPin.P8;
@@ -15,9 +18,6 @@ class LEDs {
         this.ledIndex = 0;
         this.leds = [this.red,this.yellow, this.blue, this.green];  
     }
-
-
-
 
     public allFlash(numberOfTimes: number, delay: number) {
 
@@ -46,6 +46,7 @@ class LEDs {
 
     public showSoilSetting(selectedSoilType: SoilType) {
         this.allOff();
+        logger.debug("selectedSoilType:" + selectedSoilType);
         pins.analogWritePin(this.leds[selectedSoilType], 500)
     }
 
